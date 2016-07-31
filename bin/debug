@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Debugger ON/OFF script
+ * ===
+ *
+ * This script enables disables the Nette Debugger using regular hidden file.
+ * Check your `app/bootstrap.php` to contain this definition of `%debugMode%`:
+ *
+ * `$parameters['debugMode'] = file_exists(__DIR__ . '/../.debug");`
+ */
+
+$dir = getcwd();
+
+if (!file_exists("$dir/app")) {
+	echo "\033[01;32mThe current working directory does not seem to be the project root directory.\033[00m", PHP_EOL;
+	echo "(There is no app/ directory in the $dir directory.", PHP_EOL;
+	exit(1);
+}
+
+$debugFile = "$dir/.debug";
+if (file_exists($debugFile)) {
+	echo "Debugger: \033[01;31mOFF\033[00m", PHP_EOL;
+	unlink($debugFile);
+} else {
+	echo "Debugger: \033[01;32mON\033[00m", PHP_EOL;
+	touch($debugFile);
+}
+
+exit(0);

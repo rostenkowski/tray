@@ -13,9 +13,9 @@
 
 $dir = getcwd();
 
-if (!file_exists("$dir/app")) {
+if (!file_exists("$dir/composer.json")) {
 	echo "\033[01;32mThe current working directory does not seem to be the project root directory.\033[00m", PHP_EOL;
-	echo "(There is no app/ directory in the $dir directory.", PHP_EOL;
+	echo "(There is no composer.json file in the $dir directory.", PHP_EOL;
 	exit(1);
 }
 

@@ -55,16 +55,31 @@ final class Stopwatch implements IBarPanel
 
 
 	/**
-	 * Stops the timer.
+	 * Stops the timer and logs event to syslog.
 	 *
-	 * @param  string $name The timer name.
+	 * @param string   $name The timer name.
+	 * @param string[] $tags
 	 * @return integer The current timer value.
 	 */
-	public static function stop($name)
+	public static function stop($name, $tags = [], $data = [])
 	{
 		$point = Debugger::timer();
 
-		return self::add($point, $name);
+		$measure = self::add($point, $name);
+
+		// profile log to syslog
+		syslog(LOG_INFO, json_encode([
+			'event'    => $name,
+			'php'      => PHP_VERSION,
+			'time'     => time(),
+			'host'     => $_SERVER['HTTP_HOST'],
+			'uri'      => $_SERVER['REQUEST_URI'],
+			'duration' => round($measure * 1000, 1), // duration in ms
+			'tags'     => $tags,
+			'data'     => $data,
+		]));
+
+		return $measure;
 	}
 
 

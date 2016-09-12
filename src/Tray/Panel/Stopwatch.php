@@ -129,7 +129,7 @@ final class Stopwatch implements IBarPanel
 
 		$sum = number_format(round(array_sum(self::$timers) * 1000, 1), 1);
 
-		return '<span>' . $sum . ' ms</span>';
+		return '<span>(' . $sum . ' ms)</span>';
 	}
 
 

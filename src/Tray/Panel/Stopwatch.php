@@ -66,8 +66,11 @@ final class Stopwatch implements IBarPanel
 
 		$measure = self::add($point, $name);
 
-		$tags = $data['tags'];
-		unset($data['tags']);
+		$tags = [];
+		if (isset($data['tags'])) {
+			$tags = $data['tags'];
+			unset($data['tags']);
+		}
 
 		syslog(LOG_INFO, json_encode([
 			'tags'     => explode(' ', $name) + $tags,

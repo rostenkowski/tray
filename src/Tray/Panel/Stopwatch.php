@@ -46,23 +46,23 @@ final class Stopwatch implements IBarPanel
 	/**
 	 * Starts the timer.
 	 *
-	 * @return void
+	 * @param $name
 	 */
-	public static function start()
+	public static function start($name)
 	{
-		Debugger::timer();
+		Debugger::timer($name);
 	}
 
 
 	/**
 	 * Stops the timer and logs event to syslog.
 	 *
-	 * @param string   $name The timer name.
+	 * @param string $name The timer name.
 	 * @return float The current timer value.
 	 */
 	public static function stop($name, $data = [])
 	{
-		$point = Debugger::timer();
+		$point = Debugger::timer($name);
 
 		$measure = self::add($point, $name);
 
@@ -73,13 +73,18 @@ final class Stopwatch implements IBarPanel
 		}
 
 		syslog(LOG_INFO, json_encode([
-			'tags'     => explode(' ', $name) + $tags,
-			'duration' => round($measure * 1000, 1), // duration in ms
-			'php'      => PHP_VERSION,
-			'time'     => time(),
-			'host'     => $_SERVER['HTTP_HOST'],
-			'uri'      => $_SERVER['REQUEST_URI'],
-			'data'     => $data,
+
+			'tag' => explode(' ', $name) + $tags,
+			'dur' => round($measure * 1000, 1), // duration in ms
+			'mem' => memory_get_peak_usage(),
+			'php' => PHP_VERSION,
+			'ver' => defined('ULOZTO_VERSION') ? ULOZTO_VERSION : '???',
+			'uri' => $_SERVER['REQUEST_URI'],
+
+			'time' => time(),
+			'host' => $_SERVER['HTTP_HOST'],
+			'data' => $data,
+
 		]));
 
 		return $measure;

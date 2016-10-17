@@ -29,11 +29,21 @@ final class Stopwatch implements IBarPanel
 {
 
 	/**
+	 * Default data
+	 *  
+	 * @var array
+	 */
+	private static $commonData = [];
+
+	private static $indexName = 'perf';
+
+	/**
 	 * The list of the timers.
 	 *
 	 * @var array[float]
 	 */
 	private static $timers = array();
+
 
 	/**
 	 * Starts the timer.
@@ -43,6 +53,18 @@ final class Stopwatch implements IBarPanel
 	public static function start($name)
 	{
 		Debugger::timer($name);
+	}
+
+
+	public static function setCommonData($data = [])
+	{
+		self::$commonData = $data;
+	}
+
+
+	public static function setIndexName($name)
+	{
+		self::$indexName = $name;
 	}
 
 
@@ -66,14 +88,15 @@ final class Stopwatch implements IBarPanel
 
 		syslog(LOG_INFO, json_encode([
 
-			'tag' => explode(' ', $name) + $tags,
-			'dur' => round($measure * 1000, 1), // duration in ms
-			'mem' => memory_get_peak_usage(),
-			'php' => PHP_VERSION,
-			'uri' => $_SERVER['REQUEST_URI'],
+			'type' => self::$indexName,
+			'tag'  => explode(' ', $name) + $tags,
+			'dur'  => round($measure * 1000, 1), // duration in ms
+			'mem'  => memory_get_peak_usage(),
+			'php'  => PHP_VERSION,
+			'uri'  => $_SERVER['REQUEST_URI'],
 			'time' => time(),
 			'host' => $_SERVER['HTTP_HOST'],
-			'data' => $data,
+			'data' => array_merge(self::$commonData, $data),
 
 		]));
 
@@ -85,7 +108,7 @@ final class Stopwatch implements IBarPanel
 	 * Adds value in miliseconds to list of timers.
 	 *
 	 * @param  integer $time The timer value.
-	 * @param  string  $name The timer name.
+	 * @param  string $name The timer name.
 	 * @return integer The current value of the timer.
 	 */
 	private static function add($time, $name)
@@ -119,7 +142,7 @@ final class Stopwatch implements IBarPanel
 	public function getTab()
 	{
 		if (empty(self::$timers)) {
-			return NULL;
+			return null;
 		}
 
 		$sum = number_format(round(array_sum(self::$timers) * 1000, 1), 1);
@@ -136,7 +159,7 @@ final class Stopwatch implements IBarPanel
 	public function getPanel()
 	{
 		if (empty(self::$timers)) {
-			return NULL;
+			return null;
 		}
 
 		$sum = number_format(round(array_sum(self::$timers) * 1000, 1), 1);

@@ -36,14 +36,6 @@ final class Stopwatch implements IBarPanel
 	private static $timers = array();
 
 	/**
-	 * The debugger bar icon.
-	 *
-	 * @var array[string]
-	 */
-	private $icon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAYAAAAmlE46AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAVdJREFUKJF10j9IllEUBvCfr39QDEzRrEkCrVVUpEEQBxcHoamhpbXJJWhy0l0MJ1c3F0fBwUEQ+UDadBJBRM0/VCRamfk5vOfVq34euHDPufec8zznPFS2SZRx+Mi7mgqxKhxgDT8eS6yq4NeiGc/wB7u4wBUyvMF2mtSEz1gPmMU5xCx6MYzvWCw6dmI6Hv5hCydowEu04Qif8DrunmIhqm/iPV6gJU4/5gPuAQaL2XzE7+jyKoH+DaNxfxKIylhCI5Rwjg/3BpUmioHtBIWhDN04xmryaTCqjiSxX1gOah0Z6nAZXQsbDnhvk1gZp6hGTRYJ9TGIwubwE1+SWIb2aPJXkL3AuLuCGEBr4ndGsX25CLwLCEfBrZK1u13ZvFxdajETEE4wgT48R1cU/or/8j2nK9OKKbmoL7GHDfluz4JTCT0e6lu1fG9zcoVcyQe3grFAcGPXQ5RVoy+x+08AAAAASUVORK5CYII=';
-
-
-	/**
 	 * Starts the timer.
 	 *
 	 * @param $name
@@ -78,9 +70,7 @@ final class Stopwatch implements IBarPanel
 			'dur' => round($measure * 1000, 1), // duration in ms
 			'mem' => memory_get_peak_usage(),
 			'php' => PHP_VERSION,
-			'ver' => defined('ULOZTO_VERSION') ? ULOZTO_VERSION : '???',
 			'uri' => $_SERVER['REQUEST_URI'],
-
 			'time' => time(),
 			'host' => $_SERVER['HTTP_HOST'],
 			'data' => $data,

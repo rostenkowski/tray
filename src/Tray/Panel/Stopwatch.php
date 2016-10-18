@@ -30,10 +30,10 @@ final class Stopwatch implements IBarPanel
 
 	/**
 	 * Default data
-	 *  
+	 *
 	 * @var array
 	 */
-	private static $commonData = [];
+	private static $defaults = [];
 
 	private static $indexName = 'perf';
 
@@ -56,9 +56,9 @@ final class Stopwatch implements IBarPanel
 	}
 
 
-	public static function setCommonData($data = [])
+	public static function setDefaults($data = [])
 	{
-		self::$commonData = $data;
+		self::$defaults = $data;
 	}
 
 
@@ -89,14 +89,14 @@ final class Stopwatch implements IBarPanel
 		syslog(LOG_INFO, json_encode([
 
 			'type' => self::$indexName,
-			'tag'  => explode(' ', $name) + $tags,
+			'tags' => explode(' ', $name) + $tags,
 			'dur'  => round($measure * 1000, 1), // duration in ms
 			'mem'  => memory_get_peak_usage(),
 			'php'  => PHP_VERSION,
-			'uri'  => $_SERVER['REQUEST_URI'],
 			'time' => time(),
 			'host' => $_SERVER['HTTP_HOST'],
-			'data' => array_merge(self::$commonData, $data),
+			'uri'  => $_SERVER['REQUEST_URI'],
+			'data' => array_merge(self::$defaults, $data),
 
 		]));
 

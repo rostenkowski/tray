@@ -68,9 +68,9 @@ final class Stopwatch implements IBarPanel
 	}
 
 
-	public static function setDefaults($data = [])
+	public static function addDefaults($data = [])
 	{
-		self::$defaults = $data;
+		self::$defaults = array_merge(self::$defaults, $data);
 	}
 
 

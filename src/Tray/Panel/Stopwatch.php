@@ -120,7 +120,6 @@ final class Stopwatch implements IBarPanel
 				'mem'  => memory_get_peak_usage(),
 				'php'  => PHP_VERSION,
 				'time' => time(),
-				'uri'  => $_SERVER['REQUEST_URI'],
 				'data' => array_merge(self::$defaults, $data),
 
 			]));

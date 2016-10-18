@@ -35,6 +35,18 @@ final class Stopwatch implements IBarPanel
 	 */
 	private static $defaults = [];
 
+	/**
+	 * Enable profiler
+	 *
+	 * @var boolean
+	 */
+	private static $profile = false;
+
+	/**
+	 * Index name
+	 *
+	 * @var string
+	 */
 	private static $indexName = 'perf';
 
 	/**
@@ -68,6 +80,18 @@ final class Stopwatch implements IBarPanel
 	}
 
 
+	public static function enableProfiler()
+	{
+		self::$profile = true;
+	}
+
+
+	public static function disableProfiler()
+	{
+		self::$profile = false;
+	}
+
+
 	/**
 	 * Stops the timer and logs event to syslog.
 	 *
@@ -80,25 +104,28 @@ final class Stopwatch implements IBarPanel
 
 		$measure = self::add($point, $name);
 
-		$tags = [];
-		if (isset($data['tags'])) {
-			$tags = $data['tags'];
-			unset($data['tags']);
+		if (self::$profile) {
+
+			$tags = [];
+			if (isset($data['tags'])) {
+				$tags = $data['tags'];
+				unset($data['tags']);
+			}
+
+			syslog(LOG_INFO, json_encode([
+
+				'type' => self::$indexName,
+				'tags' => explode(' ', $name) + $tags,
+				'dur'  => round($measure * 1000, 1), // duration in ms
+				'mem'  => memory_get_peak_usage(),
+				'php'  => PHP_VERSION,
+				'time' => time(),
+				'host' => $_SERVER['HTTP_HOST'],
+				'uri'  => $_SERVER['REQUEST_URI'],
+				'data' => array_merge(self::$defaults, $data),
+
+			]));
 		}
-
-		syslog(LOG_INFO, json_encode([
-
-			'type' => self::$indexName,
-			'tags' => explode(' ', $name) + $tags,
-			'dur'  => round($measure * 1000, 1), // duration in ms
-			'mem'  => memory_get_peak_usage(),
-			'php'  => PHP_VERSION,
-			'time' => time(),
-			'host' => $_SERVER['HTTP_HOST'],
-			'uri'  => $_SERVER['REQUEST_URI'],
-			'data' => array_merge(self::$defaults, $data),
-
-		]));
 
 		return $measure;
 	}

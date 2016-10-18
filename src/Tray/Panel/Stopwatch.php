@@ -121,6 +121,7 @@ final class Stopwatch implements IBarPanel
 				'php'  => PHP_VERSION,
 				'time' => time(),
 				'data' => array_merge(self::$defaults, $data),
+				'host' => gethostname(),
 
 			]));
 		}

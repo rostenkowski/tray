@@ -112,18 +112,22 @@ final class Stopwatch implements IBarPanel
 				unset($data['tags']);
 			}
 
-			syslog(LOG_INFO, json_encode([
+			if (function_exists('syslog')) {
 
-				'type' => self::$indexName,
-				'tags' => explode(' ', $name) + $tags,
-				'host' => gethostname(),
-				'dur'  => round($measure * 1000, 1), // duration in ms
-				'mem'  => memory_get_peak_usage(),
-				'php'  => PHP_VERSION,
-				'time' => time(),
-				'data' => array_merge(self::$defaults, $data),
+				syslog(LOG_INFO, json_encode([
 
-			]));
+					'type' => self::$indexName,
+					'tags' => explode(' ', $name) + $tags,
+					'host' => gethostname(),
+					'dur'  => round($measure * 1000, 1), // duration in ms
+					'mem'  => memory_get_peak_usage(),
+					'php'  => PHP_VERSION,
+					'time' => time(),
+					'data' => array_merge(self::$defaults, $data),
+
+				]));
+
+			}
 		}
 
 		return $measure;

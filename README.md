@@ -1,9 +1,5 @@
 # tray
 
-## Tracy Debugger Extensions
+[build status: unstable]
 
-### Debugger panels
-
-- Git Branch
-- IP Address
-- Stopwatch
+## just some tracy debugger extensions
